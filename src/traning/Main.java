@@ -22,7 +22,7 @@ public class Main {
 		//入力の妥当性、IDの重複がないかを確認
 		TrainingValidator tra = new TrainingValidator();
 		boolean a = tra.validate(emp,score);
-		if(a = true) {
+		if(a ) {
 			//社員IDと名前と点数を持ったインスタンスを作成
 			//合否の判定
 			Map<String, List<String>> empList = new HashMap<>();
