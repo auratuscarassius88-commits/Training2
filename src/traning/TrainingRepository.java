@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 public class TrainingRepository {
 
-	private String path = "Trining.text";
+	private String path = "Training.text";
 	public String save(TrainingResult result) {
 		//研修結果を保存する。
 		String save = "";
