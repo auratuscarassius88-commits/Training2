@@ -1,8 +1,5 @@
 package traning;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -19,24 +16,31 @@ public class Main {
 		int score = sc.nextInt();
 		Employee emp = new Employee(emp_ID,emp_name);
 		
-		//入力の妥当性、IDの重複がないかを確認
-		TrainingValidator tra = new TrainingValidator();
-		boolean a = tra.validate(emp,score);
-		if(a ) {
-			//社員IDと名前と点数を持ったインスタンスを作成
-			//合否の判定
-			Map<String, List<String>> empList = new HashMap<>();
-			TrainingService ts = new TrainingService();
-			empList = ts.registerTrainingResult(emp, score);
-			//合否の判定
-			String judge = ts.judgeResult(score);
-			//トレーニングリザルトをインスタンス化して結果を代入する
-			//結果をファイルに保存
-			TrainingRepository tr = new TrainingRepository();
+		TrainingService ts = new TrainingService();
+		//入力を判定
+		TrainingValidator tv = new TrainingValidator();
+		//==trueを入れたほうが可読性高い？
+		if((tv.validate(emp, score))){
+			//TrainingServiceをつかってTrainingResultをインスタンス化。ID、名前、点数、合否が入っている。
+			TrainingResult tr = ts.registerTrainingResult(emp, score);
+			//保存するためにTrainingRepositoryをインスタンス化する
+			TrainingRepository tres = new TrainingRepository();
+			String save = tres.save(tr);
 			
-		}else {
-			System.out.println("入力が正しくありません。プログラムを終了します。");		
+			System.out.println(save);
+			//正常に登録されていたら今回の結果をプリント
+			if(save.equals("書き込みが完了しました")){
+				System.out.println("社員ID:" + tr.getEmp().getEmp_ID());
+				System.out.println("社員名:" + tr.getEmp().getEmp_name());
+				System.out.println("点数:" + tr.getScore());
+				System.out.println("判定:" + tr.getJudge());
+			}
+		}else{
+			System.out.println("入力が正しくありません");
 		}
+		System.err.println("システムを終了します。");
+
+
 		
 	}
 }

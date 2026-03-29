@@ -1,24 +1,19 @@
 package traning;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TrainingService {
-	public Map<String, List<String>> registerTrainingResult(Employee employee,int score) {
+	public TrainingResult registerTrainingResult(Employee employee,int score) {
 		//研修結果を登録する。
-		Map<String, List<String>> empList = new HashMap<>();
-		List<String> value = new ArrayList<>();
-		value.add(employee.getEmp_name());
-		value.add(Integer.toString(score));
-		empList.put(employee.getEmp_ID(),value);
 		
+		//合格判定Stringを宣言
+		String judge = judgeResult(score);
+		//TrainingResultインスタンスを作成
+		TrainingResult result = new TrainingResult(employee, score, judge);
+
 		
-		return empList;
+		return result;
 	}
 	
 	public String judgeResult(int score) {
@@ -31,17 +26,13 @@ public class TrainingService {
 		return discrimination;
 	}
 	
-	public String getResultList() {
+	public List<TrainingResult> getResultList() {
 		//研修結果一覧を取得する。
-		String result = "";
-		try (BufferedReader reader = new BufferedReader((new FileReader("Training.txt")))){
-			
-			
-			
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
+		TrainingRepository tr = new TrainingRepository();
+		List<TrainingResult> resultList = new ArrayList<>();
+		//findAllメソッドをつかう
+		resultList = tr.findAll();
 		
-		return result;
+		return resultList;
 	}
 }

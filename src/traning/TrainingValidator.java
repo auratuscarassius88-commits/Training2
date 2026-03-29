@@ -1,5 +1,6 @@
 package traning;
 
+import java.util.*;
 public class TrainingValidator {
 	public boolean validate(Employee employee,int score) {
 		//受講者情報および研修点数の妥当性をチェックする
@@ -21,7 +22,22 @@ public class TrainingValidator {
 		}
 		
 		//受講者情報のIDが重複していないことを確認
+		TrainingRepository tr = new TrainingRepository();
+		List<TrainingResult> resultList = new ArrayList<>();
+		resultList = tr.findAll();
 		
+		for(TrainingResult ts : resultList){
+			//IDの比較
+			//テキストファイルに保存されていたものをStringに
+			Employee emp = ts.getEmp();
+			String id = emp.getEmp_ID();
+			//引数で受け取ったものをStringに
+			String now_Id = employee.getEmp_ID();
+			//保存されていたものと入力されていたもののIDの比較
+			if(id.equals(now_Id)){
+				return false;
+			}
+		}
 		
 		return hanbetu;
 	}

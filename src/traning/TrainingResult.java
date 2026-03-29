@@ -2,10 +2,10 @@ package traning;
 
 public class TrainingResult {
 	private Employee emp;
-	int score;
-	String judge;
+	private int score;
+	private String judge;
 
-    public TrainingResult(Employee emp, String judge, int score) {
+    public TrainingResult(Employee emp, int score,String judge) {
         this.emp = emp;
         this.judge = judge;
         this.score = score;
