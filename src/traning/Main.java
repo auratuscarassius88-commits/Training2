@@ -1,5 +1,6 @@
 package traning;
 
+import java.nio.charset.StandardCharsets;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -8,16 +9,16 @@ public class Main {
     public static void main(String[] args) {
         try {
             //入力用のスキャナーをインスタンス化
-            Scanner sc = new Scanner(System.in);
-
+            Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);//文字化け対策
+            
             System.out.println("社員ID、名前、点数の順に入力してください");
             System.out.println("社員ID");
-            String emp_ID = sc.next();
+            String emp_ID = sc.nextLine();
             System.out.println("社員名");
-            String emp_name = sc.next();
+            String emp_name = sc.nextLine();
             System.out.println("点数");
             //文字列で来たらキャッチする必要性がある
-            int score = sc.nextInt();
+            int score = Integer.parseInt(sc.nextLine());
             //empをインスタンス化
             Employee emp = new Employee(emp_ID, emp_name);
 
