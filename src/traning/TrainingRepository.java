@@ -13,9 +13,9 @@ public class TrainingRepository {
 
     private String path = "Training.text";
 
-    public String save(TrainingResult result) {
+    public boolean save(TrainingResult result) {
         //研修結果を保存する。
-        String save = "";
+        boolean save;
 
         try (BufferedWriter bw = Files.newBufferedWriter(
                 Path.of(path),
@@ -25,11 +25,11 @@ public class TrainingRepository {
             //Employeeのインスタンス化
             Employee emp = result.getEmp();
             //ID、名前、点数、合否の順で書き込む
-            bw.write(emp.getEmp_ID() + "," + emp.getEmp_name() + "," + result.getScore() + "," + result.getJudge());
+            bw.write(emp.getEmpId() + "," + emp.getEmpName() + "," + result.getScore() + "," + result.getJudge());
             bw.newLine();//改行用
-            save = "書き込みが完了しました";
+            save = true;
         } catch (Exception e) {
-            save = "書き込みが失敗しました。";
+            save = false;
 
         }
         return save;
@@ -40,7 +40,7 @@ public class TrainingRepository {
         //格納するリストを作成
         List<TrainingResult> resultList = new ArrayList<>();
         Path filePath = Path.of(path);
-		//何もない場合からのリストを返す
+        //何もない場合からのリストを返す
         if (!Files.exists(filePath)) {
             return resultList;
         }

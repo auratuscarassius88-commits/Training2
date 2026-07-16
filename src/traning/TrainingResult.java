@@ -1,11 +1,12 @@
 package traning;
 
 public class TrainingResult {
-	private Employee emp;
-	private int score;
-	private String judge;
 
-    public TrainingResult(Employee emp, int score,String judge) {
+    private Employee emp;
+    private int score;
+    private String judge;
+
+    public TrainingResult(Employee emp, int score, String judge) {
         this.emp = emp;
         this.judge = judge;
         this.score = score;
@@ -23,6 +24,4 @@ public class TrainingResult {
         return judge;
     }
 
-	
-	
 }

@@ -3,53 +3,52 @@ package traning;
 import java.util.List;
 
 public class TrainingService {
-	public TrainingResult registerTrainingResult(Employee employee,int score) {
-		//研修結果を登録する。
 
-		//例外処理
-		 if (employee == null) {
+    public TrainingResult registerTrainingResult(Employee employee, int score) {
+        //研修結果を登録する。
+
+        //例外処理
+        if (employee == null) {
             throw new IllegalArgumentException("社員情報が入力されていません");
         }
 
-        if (employee.getEmp_ID() == null || employee.getEmp_ID().isEmpty()) {
+        if (employee.getEmpId() == null || employee.getEmpId().isEmpty()) {
             throw new IllegalArgumentException("社員IDが入力されていません");
         }
 
-        if (employee.getEmp_name() == null || employee.getEmp_name().isEmpty()) {
+        if (employee.getEmpName() == null || employee.getEmpName().isEmpty()) {
             throw new IllegalArgumentException("社員名が入力されていません");
         }
 
         if (score < 0 || score > 100) {
             throw new IllegalArgumentException("点数は0点以上100点以下で入力してください");
         }
-		TrainingValidator validator = new TrainingValidator();
+        TrainingValidator validator = new TrainingValidator();
 
-    if (!validator.validate(employee, score)) {
-        throw new IllegalArgumentException("入力内容が正しくありません");
-    }
-
+        if (!validator.validate(employee, score)) {
+            throw new IllegalArgumentException("入力内容が正しくありません");
+        }
 
         String judge = judgeResult(score);
         return new TrainingResult(employee, score, judge);
-	}
-	
-	
-	public String judgeResult(int score) {
-		//点数に基づいて合否を判定する。
-		
-		String discrimination = "不合格";
-		if(score > 75) {
-			discrimination = "合格";
-		}
-		return discrimination;
-	}
-	
-	public List<TrainingResult> getResultList() {
-		//研修結果一覧を取得する。
-		TrainingRepository tr = new TrainingRepository();
-		//研修結果をインスタンス化
-		List<TrainingResult> resultList = tr.findAll();
-		
-		return resultList;
-	}
+    }
+
+    public String judgeResult(int score) {
+        //点数に基づいて合否を判定する。
+
+        String discrimination = "不合格";
+        if (score >= 75) {
+            discrimination = "合格";
+        }
+        return discrimination;
+    }
+
+    public List<TrainingResult> getResultList() {
+        //研修結果一覧を取得する。
+        TrainingRepository repository = new TrainingRepository();
+        //研修結果をインスタンス化
+        List<TrainingResult> resultList = repository.findAll();
+
+        return resultList;
+    }
 }

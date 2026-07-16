@@ -1,7 +1,11 @@
 package traning;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.InputMismatchException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -10,38 +14,37 @@ public class Main {
         try {
             //入力用のスキャナーをインスタンス化
             Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);//文字化け対策
-            
-            System.out.println("社員ID、名前、点数の順に入力してください");
-            System.out.println("社員ID");
-            String emp_ID = sc.nextLine();
-            System.out.println("社員名");
-            String emp_name = sc.nextLine();
-            System.out.println("点数");
-            //文字列で来たらキャッチする必要性がある
-            int score = Integer.parseInt(sc.nextLine());
-            //empをインスタンス化
-            Employee emp = new Employee(emp_ID, emp_name);
 
-            TrainingService ts = new TrainingService();
-            //入力を判定はTrainingServerへ
-            // TrainingValidator tv = new TrainingValidator();
-            //==trueを入れたほうが可読性高い？
-            //TrainingServiceをつかってTrainingResultをインスタンス化。ID、名前、点数、合否が入っている。
-            TrainingResult tr = ts.registerTrainingResult(emp, score);
-            //保存するためにTrainingRepositoryをインスタンス化する
-            TrainingRepository tres = new TrainingRepository();
-            String save = tres.save(tr);
+            TrainingService service = new TrainingService();
+            TrainingRepository repository = new TrainingRepository();
 
-            System.out.println(save);
-            //正常に登録されていたら今回の結果をプリント
-            if (save.equals("書き込みが完了しました")) {
-                System.out.println("社員ID:" + tr.getEmp().getEmp_ID());
-                System.out.println("社員名:" + tr.getEmp().getEmp_name());
-                System.out.println("点数:" + tr.getScore());
-                System.out.println("判定:" + tr.getJudge());
+            System.out.println("入力方法を選択してください");
+            System.out.println("1: 手入力");
+            System.out.println("2: ファイル読み込み");
+            //分岐用の変数
+            String mode = sc.nextLine();
+
+            if (mode.equals("1")) {
+                inputOne(sc, service, repository);
+            } else if (mode.equals("2")) {
+                inputFile(sc, service, repository);
+            } else {
+                throw new IllegalArgumentException("指定された入力方法に従ってください");
             }
 
-        } catch (InputMismatchException e) {
+            System.out.println("登録されてる結果を表示します。");
+
+            List<TrainingResult> resultList = service.getResultList();
+
+            for (TrainingResult result : resultList) {
+                System.out.println("社員ID:" + result.getEmp().getEmpId());
+                System.out.println("社員名:" + result.getEmp().getEmpName());
+                System.out.println("点数:" + result.getScore());
+                System.out.println("判定:" + result.getJudge());
+                System.out.println("--------------------");
+            }
+
+        } catch (NumberFormatException e) {
             System.out.println("点数には数値を入力してください");
 
         } catch (IllegalArgumentException e) {
@@ -53,5 +56,82 @@ public class Main {
         } finally {
             System.out.println("システムを終了します。");
         }
+    }
+    //単体読み込み用のメソッド ほかで使わないためprivateに
+
+    private static void inputOne(Scanner sc, TrainingService service, TrainingRepository repository) {
+
+        System.out.println("社員ID、名前、点数の順に入力してください");
+        System.out.println("社員ID");
+        String emp_ID = sc.nextLine();
+        System.out.println("社員名");
+        String emp_name = sc.nextLine();
+        System.out.println("点数");
+        //文字列で来たらキャッチする必要性がある
+        int score = Integer.parseInt(sc.nextLine());
+
+        //empをインスタンス化
+        Employee emp = new Employee(emp_ID, emp_name);
+        //保存処理に移行
+        hozon(emp, score, service, repository);
+    }
+
+    //ファイル読み込み用
+    private static void inputFile(Scanner sc, TrainingService service, TrainingRepository repository) throws IOException {
+
+        System.out.println("読み込むファイル名を入力してください");
+        //同じ階層にあることが前提？
+        String fileName = sc.nextLine();
+
+        try (BufferedReader br = Files.newBufferedReader(Path.of(fileName), StandardCharsets.UTF_8)) {
+            //中身を入れる変数
+            String line;
+            //nullになるまで繰り返す
+            while ((line = br.readLine()) != null) {
+                //trimで空白を無くし空行であればスキップ
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                try {
+                    //カンマ区切りで配列に
+                    String[] data = line.split(",");
+                    //配列が3つ以下ならエラー処理する
+                    if (data.length != 3) {
+                        throw new IllegalArgumentException("ファイル形式に問題があります" + line);
+                    }
+                    String empId = data[0].trim();
+                    String empName = data[1].trim();
+                    int score = Integer.parseInt(data[2].trim());
+                    Employee emp = new Employee(empId, empName);
+
+                    //All or Nothingにしたかったが、工数がかかるのでで1行づつ保存、結果表示
+                    hozon(emp, score, service, repository);
+
+                } catch (IllegalArgumentException e) {
+                    System.out.println("この行は登録できませんでした: " + line);
+                    System.out.println("理由: " + e.getMessage());
+                }
+            }
+        }
+
+    }
+
+    private static void hozon(Employee emp, int score, TrainingService service, TrainingRepository repository) {
+
+        TrainingResult result = service.registerTrainingResult(emp, score);
+
+        Boolean save = repository.save(result);
+
+        if (save) {
+            // System.out.println("社員ID:" + result.getEmp().getEmpId());
+            // System.out.println("社員名:" + result.getEmp().getEmpName());
+            // System.out.println("点数:" + result.getScore());
+            // System.out.println("判定:" + result.getJudge());
+            // System.out.println("--------------------");
+        } else {
+            System.out.println("書き込みに失敗しました。");
+        }
+
     }
 }
