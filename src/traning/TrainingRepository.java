@@ -50,9 +50,18 @@ public class TrainingRepository {
             //中身がなくなったら終了できるように判別するString
             String txt;
             while ((txt = br.readLine()) != null) {
+                //空白を削除して空行なら処理をスキップ
+                if (txt.trim().isEmpty()) {
+                    continue;
+                }
+                
                 //空白で分割して配列に格納
                 String[] value = txt.split(",");
 
+                //要素数が4でない場合はスキップ
+                if(value.length != 4){
+                    continue;
+                }
                 //リストに格納
                 //employeeをインスタンス化してIDと名前を渡す
                 Employee emp = new Employee(value[0], value[1]);

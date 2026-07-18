@@ -73,7 +73,7 @@ public class Main {
         //empをインスタンス化
         Employee emp = new Employee(emp_ID, emp_name);
         //保存処理に移行
-        hozon(emp, score, service, repository);
+        saveandplint(emp, score, service, repository);
     }
 
     //ファイル読み込み用
@@ -106,7 +106,7 @@ public class Main {
                     Employee emp = new Employee(empId, empName);
 
                     //All or Nothingにしたかったが、工数がかかるのでで1行づつ保存、結果表示
-                    hozon(emp, score, service, repository);
+                    saveandplint(emp, score, service, repository);
 
                 } catch (IllegalArgumentException e) {
                     System.out.println("この行は登録できませんでした: " + line);
@@ -117,7 +117,7 @@ public class Main {
 
     }
 
-    private static void hozon(Employee emp, int score, TrainingService service, TrainingRepository repository) {
+    private static void saveandplint(Employee emp, int score, TrainingService service, TrainingRepository repository) {
 
         TrainingResult result = service.registerTrainingResult(emp, score);
 
