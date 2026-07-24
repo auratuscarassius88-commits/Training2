@@ -11,20 +11,23 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        try {
-            //入力用のスキャナーをインスタンス化
-            Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);//文字化け対策
+        boolean ran = true;
+        //終了を選択しない限りループする仕様にする
+        while(ran){
+             try {
+                //入力用のスキャナーをインスタンス化
+                Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);//文字化け対策
 
-            TrainingService service = new TrainingService();
-            TrainingRepository repository = new TrainingRepository();
-            boolean ran = true;
-            //終了を選択しない限りループする仕様にする
-            while(ran){
+                TrainingService service = new TrainingService();
+                TrainingRepository repository = new TrainingRepository();
+            
+            
 
                 System.out.println("入力方法を選択してください");
                 System.out.println("1: 手入力");
                 System.out.println("2: ファイル読み込み");
                 System.out.println("3: 登録されている結果の表示");
+                System.out.println("5: 合格していない者の一覧表示");
                 System.out.println("4: 終了");
 
                 //分岐用の変数
@@ -33,39 +36,30 @@ public class Main {
                 switch(mode){
                     case "1": inputOne(sc, service, repository);
                          break;
-                   case "2": inputFile(sc, service, repository);
+                    case "2": inputFile(sc, service, repository);
                          break;
-                    case "3":  System.out.println("登録されてる結果を表示します。");
-
-                    List<TrainingResult> resultList = service.getResultList();
-
-                    for (TrainingResult result : resultList) {
-                        System.out.println("社員ID:" + result.getEmp().getEmpId());
-                        System.out.println("社員名:" + result.getEmp().getEmpName());
-                        System.out.println("点数:" + result.getScore());
-                        System.out.println("判定:" + result.getJudge());
-                        System.out.println("--------------------");
-                    }
+                    case "3":printResultList();   
                         break;
                     case "4":System.out.println("システムを終了します");
-                            ran = false;
-                            break;
+                        ran = false;
+                        break;
                     default:System.out.println("正しい番号を入力してください");
                         break;
                 }
-            }
             
-        } catch (NumberFormatException e) {
-            System.out.println("点数には数値を入力してください");
+            
+            } catch (NumberFormatException e) {
+                System.out.println("点数には数値を入力してください");
 
-        } catch (IllegalArgumentException e) {
-            System.out.println("入力エラー: " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+             System.out.println("入力エラー: " + e.getMessage());
 
-        } catch (Exception e) {
-            System.out.println("予期しないエラーが発生しました");
+            } catch (Exception e) {
+                System.out.println("予期しないエラーが発生しました");
 
-        } finally {
-            System.out.println("システムを終了します。");
+            } finally {
+                System.out.println("システムを終了します。");
+                }
         }
     }
     //単体読み込み用のメソッド ほかで使わないためprivateに
@@ -82,7 +76,7 @@ public class Main {
         int score = Integer.parseInt(sc.nextLine());
 
         //empをインスタンス化
-        Employee emp = new Employee(emp_ID, emp_name);
+        Employee emp = new Employee(empId, empName);
         //保存処理に移行
         saveandplint(emp, score, service, repository);
     }
@@ -128,11 +122,11 @@ public class Main {
 
     }
 
-    private static void saveandplint(Employee emp, int score, TrainingService service, TrainingRepository repository) {
+    private static void saveandprint(Employee emp, int score, TrainingService service, TrainingRepository repository) {
 
         TrainingResult result = service.registerTrainingResult(emp, score);
 
-        Boolean save = repository.save(result);
+        boolean save = repository.save(result);
 
         if (save) {
             System.out.println("社員ID:" + result.getEmp().getEmpId());
@@ -144,5 +138,22 @@ public class Main {
             System.out.println("書き込みに失敗しました。");
         }
 
+    }
+
+    private static void printResultList(TrainingService service){
+        List<TrainingResult> resultList = service.getResultList();
+        System.out.println("登録されてる結果を表示します。");
+        if(resultList.isEmpty){
+            System.out.println("登録されている結果がありません");
+        }else{
+            for (TrainingResult result : resultList) {
+                System.out.println("社員ID:" + result.getEmp().getEmpId());
+                System.out.println("社員名:" + result.getEmp().getEmpName());
+                System.out.println("点数:" + result.getScore());
+                System.out.println("判定:" + result.getJudge());
+                System.out.println("--------------------");
+            }
+        }
+            
     }
 }
