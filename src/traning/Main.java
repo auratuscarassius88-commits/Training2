@@ -17,33 +17,44 @@ public class Main {
 
             TrainingService service = new TrainingService();
             TrainingRepository repository = new TrainingRepository();
+            boolean ran = true;
+            //終了を選択しない限りループする仕様にする
+            while(ran){
 
-            System.out.println("入力方法を選択してください");
-            System.out.println("1: 手入力");
-            System.out.println("2: ファイル読み込み");
-            //分岐用の変数
-            String mode = sc.nextLine();
+                System.out.println("入力方法を選択してください");
+                System.out.println("1: 手入力");
+                System.out.println("2: ファイル読み込み");
+                System.out.println("3: 登録されている結果の表示");
+                System.out.println("4: 終了");
 
-            if (mode.equals("1")) {
-                inputOne(sc, service, repository);
-            } else if (mode.equals("2")) {
-                inputFile(sc, service, repository);
-            } else {
-                throw new IllegalArgumentException("指定された入力方法に従ってください");
+                //分岐用の変数
+                String mode = sc.nextLine();
+
+                switch(mode){
+                    case "1": inputOne(sc, service, repository);
+                         break;
+                   case "2": inputFile(sc, service, repository);
+                         break;
+                    case "3":  System.out.println("登録されてる結果を表示します。");
+
+                    List<TrainingResult> resultList = service.getResultList();
+
+                    for (TrainingResult result : resultList) {
+                        System.out.println("社員ID:" + result.getEmp().getEmpId());
+                        System.out.println("社員名:" + result.getEmp().getEmpName());
+                        System.out.println("点数:" + result.getScore());
+                        System.out.println("判定:" + result.getJudge());
+                        System.out.println("--------------------");
+                    }
+                        break;
+                    case "4":System.out.println("システムを終了します");
+                            ran = false;
+                            break;
+                    default:System.out.println("正しい番号を入力してください");
+                        break;
+                }
             }
-
-            System.out.println("登録されてる結果を表示します。");
-
-            List<TrainingResult> resultList = service.getResultList();
-
-            for (TrainingResult result : resultList) {
-                System.out.println("社員ID:" + result.getEmp().getEmpId());
-                System.out.println("社員名:" + result.getEmp().getEmpName());
-                System.out.println("点数:" + result.getScore());
-                System.out.println("判定:" + result.getJudge());
-                System.out.println("--------------------");
-            }
-
+            
         } catch (NumberFormatException e) {
             System.out.println("点数には数値を入力してください");
 
@@ -124,11 +135,11 @@ public class Main {
         Boolean save = repository.save(result);
 
         if (save) {
-            // System.out.println("社員ID:" + result.getEmp().getEmpId());
-            // System.out.println("社員名:" + result.getEmp().getEmpName());
-            // System.out.println("点数:" + result.getScore());
-            // System.out.println("判定:" + result.getJudge());
-            // System.out.println("--------------------");
+            System.out.println("社員ID:" + result.getEmp().getEmpId());
+            System.out.println("社員名:" + result.getEmp().getEmpName());
+            System.out.println("点数:" + result.getScore());
+            System.out.println("判定:" + result.getJudge());
+            System.out.println("--------------------");
         } else {
             System.out.println("書き込みに失敗しました。");
         }
