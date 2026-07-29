@@ -28,7 +28,7 @@ public class Main {
                 System.out.println("1: 手入力");
                 System.out.println("2: ファイル読み込み");
                 System.out.println("3: 登録されている結果の表示");
-                // System.out.println("4: 合格していない者の一覧表示");
+                System.out.println("4: 合格していない者の一覧表示");
                 System.out.println("5: 終了");
 
                 //分岐用の変数
@@ -41,10 +41,9 @@ public class Main {
                          break;
                     case "3":printResultList(service);   
                         break;
-                    // case "4": printGoukaku(service);//メソッド名仮置き
-                        // break;
-                    case "5":System.out.println("システムを終了します");
-                        ran = false;
+                    case "4": printGoukaku(service);//メソッド名仮置き
+                        break;
+                    case "5":ran = false;
                         break;
                     default:System.out.println("正しい番号を入力してください");
                         break;
@@ -162,5 +161,29 @@ public class Main {
             }
         }
             
+    }
+
+    private static void printGokaku(TrainingService service){
+        List<TrainingResult> resultList = service.getResultList();
+        //不合格者がいない場合に使う
+        boolean found = false;
+        System.out.println("不合格者を表示します。");
+        if(resultList.isEmpty()){
+            System.out.println("登録されている結果がありません");
+        }else{
+            for (TrainingResult result : resultList) {
+                if(!"合格".equals(result.getJudge())){
+                    System.out.println("社員ID:" + result.getEmp().getEmpId());
+                    System.out.println("社員名:" + result.getEmp().getEmpName());
+                    System.out.println("点数:" + result.getScore());
+                    System.out.println("判定:" + result.getJudge());
+                    System.out.println("--------------------");
+                    found = true;
+                }
+            }
+            if(fond == false){
+                System.out.println("不合格者はいません");
+            }
+        }
     }
 }
