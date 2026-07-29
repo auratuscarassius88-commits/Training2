@@ -135,11 +135,7 @@ public class Main {
         boolean save = repository.save(result);
 
         if (save) {
-            System.out.println("社員ID:" + result.getEmp().getEmpId());
-            System.out.println("社員名:" + result.getEmp().getEmpName());
-            System.out.println("点数:" + result.getScore());
-            System.out.println("判定:" + result.getJudge());
-            System.out.println("--------------------");
+            printResult(result);
         } else {
             System.out.println("書き込みに失敗しました。");
         }
@@ -153,11 +149,7 @@ public class Main {
             System.out.println("登録されている結果がありません");
         }else{
             for (TrainingResult result : resultList) {
-                System.out.println("社員ID:" + result.getEmp().getEmpId());
-                System.out.println("社員名:" + result.getEmp().getEmpName());
-                System.out.println("点数:" + result.getScore());
-                System.out.println("判定:" + result.getJudge());
-                System.out.println("--------------------");
+                printResult(result);
             }
         }
             
@@ -173,11 +165,7 @@ public class Main {
         }else{
             for (TrainingResult result : resultList) {
                 if(!"合格".equals(result.getJudge())){
-                    System.out.println("社員ID:" + result.getEmp().getEmpId());
-                    System.out.println("社員名:" + result.getEmp().getEmpName());
-                    System.out.println("点数:" + result.getScore());
-                    System.out.println("判定:" + result.getJudge());
-                    System.out.println("--------------------");
+                    printResult(result);
                     found = true;
                 }
             }
@@ -186,4 +174,29 @@ public class Main {
             }
         }
     }
+
+    private static void search(Scanner sc,TrainingService service){
+        System.out.println("検索する社員IDを入力してください。");
+        //検索用の変数
+        String searchId = sc.nextLine();
+
+        List<TrainingResult> resultList = service.getResultList();
+        boolean found = false;
+        for(TrainingResult result :resultList){
+            if(searchId.equals(result.getEmp().getId())){
+                printResult(result);
+                found = true;     
+            }
+
+        }
+        if(found == false){
+            System.out.println(searchId + "は存在しません");
+        }
+    }
+    private static void printResult(TrainingResult result) {
+    System.out.println("社員ID:" + result.getEmp().getEmpId());
+    System.out.println("社員名:" + result.getEmp().getEmpName());
+    System.out.println("点数:" + result.getScore());
+    System.out.println("判定:" + result.getJudge());
+    System.out.println("--------------------");
 }
