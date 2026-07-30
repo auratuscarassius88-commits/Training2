@@ -29,7 +29,8 @@ public class Main {
                 System.out.println("2: ファイル読み込み");
                 System.out.println("3: 登録されている結果の表示");
                 System.out.println("4: 合格していない者の一覧表示");
-                System.out.println("5: 終了");
+                System.out.println("5: 社員IDの検索");
+                System.out.println("6: 終了");
 
                 //分岐用の変数
                 String mode = sc.nextLine();
@@ -43,7 +44,9 @@ public class Main {
                         break;
                     case "4": printGokaku(service);//メソッド名仮置き
                         break;
-                    case "5":ran = false;
+                    case "5": search();
+                        break;
+                    case "6":ran = false;
                         break;
                     default:System.out.println("正しい番号を入力してください");
                         break;
@@ -181,11 +184,19 @@ public class Main {
         String searchId = sc.nextLine();
 
         List<TrainingResult> resultList = service.getResultList();
+
+        //保存されているリストがないか判定
+        if(resultList.isEmpty()){
+            System.out.purintln("登録された結果がありません");
+        }
+
         boolean found = false;
         for(TrainingResult result :resultList){
             if(searchId.equals(result.getEmp().getEmpId())){
                 printResult(result);
-                found = true;     
+                found = true;
+                //IDが一意な為、見つけることができたら処理から脱出
+                break; 
             }
 
         }
