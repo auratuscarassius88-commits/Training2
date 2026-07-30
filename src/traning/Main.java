@@ -112,7 +112,7 @@ public class Main {
                     String[] data = line.split(",");
                     //配列が3つ以外ならエラー処理する
                     if (data.length != 3) {
-                        throw new IllegalArgumentException("ファイル形式に問題があります" + line);
+                        throw new IllegalArgumentException("ファイル形式に問題があります:" + line);
                     }
                     String empId = data[0].trim();
                     String empName = data[1].trim();
@@ -122,6 +122,10 @@ public class Main {
                     //All or Nothingにしたかったが、工数がかかるのでで1行づつ保存、結果表示
                     saveandprint(emp, score, service, repository);
 
+                } catch (NumberFormatException e) {
+                    System.out.println("この行は登録できませんでした: " + line);
+                    System.out.println("理由: 点数には数値を入力してください");
+                    
                 } catch (IllegalArgumentException e) {
                     System.out.println("この行は登録できませんでした: " + line);
                     System.out.println("理由: " + e.getMessage());
