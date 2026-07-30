@@ -41,7 +41,7 @@ public class Main {
                          break;
                     case "3":printResultList(service);   
                         break;
-                    case "4": printGoukaku(service);//メソッド名仮置き
+                    case "4": printGokaku(service);//メソッド名仮置き
                         break;
                     case "5":ran = false;
                         break;
@@ -169,7 +169,7 @@ public class Main {
                     found = true;
                 }
             }
-            if(fond == false){
+            if(found == false){
                 System.out.println("不合格者はいません");
             }
         }
@@ -183,7 +183,7 @@ public class Main {
         List<TrainingResult> resultList = service.getResultList();
         boolean found = false;
         for(TrainingResult result :resultList){
-            if(searchId.equals(result.getEmp().getId())){
+            if(searchId.equals(result.getEmp().getEmpId())){
                 printResult(result);
                 found = true;     
             }
@@ -194,9 +194,10 @@ public class Main {
         }
     }
     private static void printResult(TrainingResult result) {
-    System.out.println("社員ID:" + result.getEmp().getEmpId());
-    System.out.println("社員名:" + result.getEmp().getEmpName());
-    System.out.println("点数:" + result.getScore());
-    System.out.println("判定:" + result.getJudge());
-    System.out.println("--------------------");
+        System.out.println("社員ID:" + result.getEmp().getEmpId());
+        System.out.println("社員名:" + result.getEmp().getEmpName());
+        System.out.println("点数:" + result.getScore());
+        System.out.println("判定:" + result.getJudge());
+        System.out.println("--------------------");
+    }
 }
