@@ -44,7 +44,7 @@ public class Main {
                         break;
                     case "4": printGokaku(service);//メソッド名仮置き
                         break;
-                    case "5": search();
+                    case "5": search(sc, service);
                         break;
                     case "6":ran = false;
                         break;
@@ -125,7 +125,7 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.out.println("この行は登録できませんでした: " + line);
                     System.out.println("理由: 点数には数値を入力してください");
-                    
+
                 } catch (IllegalArgumentException e) {
                     System.out.println("この行は登録できませんでした: " + line);
                     System.out.println("理由: " + e.getMessage());
@@ -191,7 +191,9 @@ public class Main {
 
         //保存されているリストがないか判定
         if(resultList.isEmpty()){
-            System.out.purintln("登録された結果がありません");
+            System.out.println("登録された結果がありません");
+            //内容がないのでメインメソッドに戻る
+            return;
         }
 
         boolean found = false;
