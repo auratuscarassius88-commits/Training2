@@ -17,46 +17,51 @@ public class Main {
 
             TrainingService service = new TrainingService();
             TrainingRepository repository = new TrainingRepository();
+            boolean found = false;
+            while(found){
 
-            System.out.println("入力方法を選択してください");
-            System.out.println("1: 手入力");
-            System.out.println("2: ファイル読み込み");
-            //分岐用の変数
-            String mode = sc.nextLine();
+            
+                System.out.println("入力方法を選択してください");
+                System.out.println("1: 手入力");
+                System.out.println("2: ファイル読み込み");
+                //分岐用の変数
+                String mode = sc.nextLine();
 
-            if (mode.equals("1")) {
-                inputOne(sc, service, repository);
-            } else if (mode.equals("2")) {
+                if (mode.equals("1")) {
+                    inputOne(sc, service, repository);
+                } else if (mode.equals("2")) {
                 inputFile(sc, service, repository);
-            } else {
-                throw new IllegalArgumentException("指定された入力方法に従ってください");
+                } else {
+                    throw new IllegalArgumentException("指定された入力方法に従ってください");
+                }
+
+                System.out.println("登録されてる結果を表示します。");
+
+                List<TrainingResult> resultList = service.getResultList();
+
+                // for (TrainingResult result : resultList) {
+                //     System.out.println("社員ID:" + result.getEmp().getEmpId());
+                //     System.out.println("社員名:" + result.getEmp().getEmpName());
+                //     System.out.println("点数:" + result.getScore());
+                //     System.out.println("判定:" + result.getJudge());
+                //     System.out.println("--------------------");
+                // }
+
+            } catch (NumberFormatException e) {
+                System.out.println("点数には数値を入力してください");
+
+            } catch (IllegalArgumentException e) {
+                System.out.println("入力エラー: " + e.getMessage());
+
+            } catch (Exception e) {
+                System.out.println("予期しないエラーが発生しました");
+
+            } finally {
+                System.out.println("システムを終了します。");
             }
-
-            System.out.println("登録されてる結果を表示します。");
-
-            List<TrainingResult> resultList = service.getResultList();
-
-            for (TrainingResult result : resultList) {
-                System.out.println("社員ID:" + result.getEmp().getEmpId());
-                System.out.println("社員名:" + result.getEmp().getEmpName());
-                System.out.println("点数:" + result.getScore());
-                System.out.println("判定:" + result.getJudge());
-                System.out.println("--------------------");
-            }
-
-        } catch (NumberFormatException e) {
-            System.out.println("点数には数値を入力してください");
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("入力エラー: " + e.getMessage());
-
-        } catch (Exception e) {
-            System.out.println("予期しないエラーが発生しました");
-
-        } finally {
-            System.out.println("システムを終了します。");
         }
     }
+
     //単体読み込み用のメソッド ほかで使わないためprivateに
 
     private static void inputOne(Scanner sc, TrainingService service, TrainingRepository repository) {
@@ -124,11 +129,11 @@ public class Main {
         Boolean save = repository.save(result);
 
         if (save) {
-            // System.out.println("社員ID:" + result.getEmp().getEmpId());
-            // System.out.println("社員名:" + result.getEmp().getEmpName());
-            // System.out.println("点数:" + result.getScore());
-            // System.out.println("判定:" + result.getJudge());
-            // System.out.println("--------------------");
+            System.out.println("社員ID:" + result.getEmp().getEmpId());
+            System.out.println("社員名:" + result.getEmp().getEmpName());
+            System.out.println("点数:" + result.getScore());
+            System.out.println("判定:" + result.getJudge());
+            System.out.println("--------------------");
         } else {
             System.out.println("書き込みに失敗しました。");
         }
