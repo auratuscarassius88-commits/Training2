@@ -65,7 +65,8 @@ public class Main {
             
             } catch (Exception e) {
                 System.out.println("予期しないエラーが発生しました");
-        
+                //修復不可能なエラーなのでranを終了
+                ran = false;
             }
         }
         System.out.println("プログラムを終了します。");
