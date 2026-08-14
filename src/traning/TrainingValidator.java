@@ -32,7 +32,7 @@ public class TrainingValidator {
         for (TrainingResult result : resultList) {
             //IDの比較
             
-            String id = result.getEmp().getEmpIdId();
+            String id = result.getEmp().getEmpId();
             //引数で受け取ったものをStringに
             
             //保存されていたものと入力されていたもののIDの比較
