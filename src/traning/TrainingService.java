@@ -8,11 +8,10 @@ public class TrainingService {
         //研修結果を登録する。
         TrainingValidator validator = new TrainingValidator();
 
-        if (!validator.validate(employee, score)) {
-            throw new IllegalArgumentException("入力内容が正しくありません");
-        }
-
+        validator.validate(employee, score);//ここでエラーが出たらthrowされてmainでキャッチ
+        
         String judge = judgeResult(score);
+        
         return new TrainingResult(employee, score, judge);
     }
 

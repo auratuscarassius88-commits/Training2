@@ -4,7 +4,7 @@ import java.util.*;
 
 public class TrainingValidator {
 
-    public boolean validate(Employee employee, int score) {
+    public void validate(Employee employee, int score) {
         //受講者情報および研修点数の妥当性をチェックする
 
         //与えられたインスタンスが空でないか？
@@ -20,7 +20,7 @@ public class TrainingValidator {
             throw new IllegalArgumentException("社員名が入力されていません");
         }
 
-        //点数が0点以上、100点未満を判別
+        // 点数が0点以上100点以下か判別
         if (score < 0 || score > 100) {
             throw new IllegalArgumentException("点数は0点以上100点以下で入力してください");
         }
@@ -32,16 +32,16 @@ public class TrainingValidator {
         for (TrainingResult result : resultList) {
             //IDの比較
             
-            String id = result.getEmp.getEmpIdId();
+            String id = result.getEmp().getEmpIdId();
             //引数で受け取ったものをStringに
             
             //保存されていたものと入力されていたもののIDの比較
-            if (id.equals(inputId)) {
-                return false;
+            if (employee.getEmpId().equals(id)) {
+                throw new IllegalArgumentException("IDが重複しています。");
             }
         }
 
-        return true;
+        
     }
 
 }
