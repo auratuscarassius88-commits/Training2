@@ -2,6 +2,7 @@ package traning;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +27,7 @@ public class TrainingRepository {
             //ID、名前、点数、合否の順で書き込む
             bw.write(emp.getEmpId() + "," + emp.getEmpName() + "," + result.getScore() + "," + result.getJudge());
             bw.newLine();//改行用
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IllegalStateException("研修結果の保存に失敗しました。", e);
         }
     }
@@ -54,21 +55,32 @@ public class TrainingRepository {
                     continue;
                 }
                 
-                //空白で分割して配列に格納
+                //カンマで分割して配列に格納
                 String[] value = txt.split(",");
 
-                //要素数が4でない場合はスキップ
+                //要素数が4でない場合はエラー処理としてストップ
                 if(value.length != 4){
                     throw new IllegalStateException(lineNumber + "行目の保存データの形が不正です。" + txt);
                 }
+                
+                //scoreをintに変換するとき数字以外のものが入っていた場合エラーをキャッチする
+                int score = 0;
+                try {
+                    score = Integer.parseInt(value[2].trim());
+                    
+                } catch (NumberFormatException e) {
+                    throw new IllegalStateException(lineNumber + "行目のデータが数字ではありません。" + txt, e);
+                }
                 //リストに格納
                 //employeeをインスタンス化してIDと名前を渡す
-                Employee emp = new Employee(value[0], value[1]);
+                Employee emp = new Employee(value[0].trim(), value[1].trim());
                 //empとスコアと合否をコンストラクタに渡してTrainingResluをインスタンス化
-                TrainingResult result = new TrainingResult(emp, Integer.parseInt(value[2]), value[3]);
+                TrainingResult result = new TrainingResult(emp, score, value[3].trim());//空白を消す意味はあるのだろうか？
 
                 //インスタンスをリストに追加
                 resultList.add(result);
+
+                 
             }
 
         } catch (Exception e) {
@@ -79,3 +91,5 @@ public class TrainingRepository {
     }
 
 }
+/*正直この辺のエラーキャッチはこのコンソールシステムの書き込みで書き込まれているはずなのでここまで過剰にエラーキャッチしようとする意味はあるのか？みたいな感じはある
+その場合はよそからテキストファイル持ってこれないようにしなければいけないのでは？ */

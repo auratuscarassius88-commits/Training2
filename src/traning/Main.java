@@ -28,8 +28,6 @@ public class Main {
                 System.out.println("1: 手入力");
                 System.out.println("2: ファイル読み込み");
                 System.out.println("3: 登録されている結果の表示");
-                System.out.println("4: 合格していない者の一覧表示");
-                System.out.println("5: 社員IDの検索");
                 System.out.println("6: 終了");
 
                 //分岐用の変数
@@ -41,10 +39,6 @@ public class Main {
                     case "2": inputFile(sc, service, repository);
                          break;
                     case "3":printResultList(service);   
-                        break;
-                    case "4": printGokaku(service);//メソッド名仮置き
-                        break;
-                    case "5": search(sc, service);
                         break;
                     case "6":ran = false;
                         break;
@@ -159,55 +153,6 @@ public class Main {
         }
             
     }
-
-    private static void printGokaku(TrainingService service){
-        List<TrainingResult> resultList = service.getResultList();
-        //不合格者がいない場合に使う
-        boolean found = false;
-        System.out.println("不合格者を表示します。");
-        if(resultList.isEmpty()){
-            System.out.println("登録されている結果がありません");
-        }else{
-            for (TrainingResult result : resultList) {
-                if(!"合格".equals(result.getJudge())){
-                    printResult(result);
-                    found = true;
-                }
-            }
-            if(found == false){
-                System.out.println("不合格者はいません");
-            }
-        }
-    }
-
-    private static void search(Scanner sc,TrainingService service){
-        System.out.println("検索する社員IDを入力してください。");
-        //検索用の変数
-        String searchId = sc.nextLine();
-
-        List<TrainingResult> resultList = service.getResultList();
-
-        //保存されているリストがないか判定
-        if(resultList.isEmpty()){
-            System.out.println("登録された結果がありません");
-            //内容がないのでメインメソッドに戻る
-            return;
-        }
-
-        boolean found = false;
-        for(TrainingResult result :resultList){
-            if(searchId.equals(result.getEmp().getEmpId())){
-                printResult(result);
-                found = true;
-                //IDが一意な為、見つけることができたら処理から脱出
-                break; 
-            }
-
-        }
-        if(found == false){
-            System.out.println(searchId + "は存在しません");
-        }
-    }
     private static void printResult(TrainingResult result) {
         System.out.println("社員ID:" + result.getEmp().getEmpId());
         System.out.println("社員名:" + result.getEmp().getEmpName());
@@ -216,72 +161,6 @@ public class Main {
         System.out.println("--------------------");
     }
 
-    private static void printResultList(TrainingService service){
-        List<TrainingResult> resultList = service.getResultList();
-        System.out.println("登録されてる結果を表示します。");
-        if(resultList.isEmpty()){
-            System.out.println("登録されている結果がありません");
-        }else{
-            for (TrainingResult result : resultList) {
-                printResult(result);
-            }
-        }
-            
-    }
-
-    private static void printGokaku(TrainingService service){
-        List<TrainingResult> resultList = service.getResultList();
-        //不合格者がいない場合に使う
-        boolean found = false;
-        System.out.println("不合格者を表示します。");
-        if(resultList.isEmpty()){
-            System.out.println("登録されている結果がありません");
-        }else{
-            for (TrainingResult result : resultList) {
-                if(!"合格".equals(result.getJudge())){
-                    printResult(result);
-                    found = true;
-                }
-            }
-            if(found == false){
-                System.out.println("不合格者はいません");
-            }
-        }
-    }
-
-    private static void search(Scanner sc,TrainingService service){
-        System.out.println("検索する社員IDを入力してください。");
-        //検索用の変数
-        String searchId = sc.nextLine();
-
-        List<TrainingResult> resultList = service.getResultList();
-
-        //保存されているリストがないか判定
-        if(resultList.isEmpty()){
-            System.out.println("登録された結果がありません");
-            //内容がないのでメインメソッドに戻る
-            return;
-        }
-
-        boolean found = false;
-        for(TrainingResult result :resultList){
-            if(searchId.equals(result.getEmp().getEmpId())){
-                printResult(result);
-                found = true;
-                //IDが一意な為、見つけることができたら処理から脱出
-                break; 
-            }
-
-        }
-        if(found == false){
-            System.out.println(searchId + "は存在しません");
-        }
-    }
-    private static void printResult(TrainingResult result) {
-        System.out.println("社員ID:" + result.getEmp().getEmpId());
-        System.out.println("社員名:" + result.getEmp().getEmpName());
-        System.out.println("点数:" + result.getScore());
-        System.out.println("判定:" + result.getJudge());
-        System.out.println("--------------------");
-    }
+    
+    
 }
