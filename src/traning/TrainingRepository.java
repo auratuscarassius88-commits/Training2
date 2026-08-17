@@ -13,9 +13,8 @@ public class TrainingRepository {
 
     private String path = "Training.text";
 
-    public boolean save(TrainingResult result) {
+    public void save(TrainingResult result) {
         //研修結果を保存する。
-        boolean save;
 
         try (BufferedWriter bw = Files.newBufferedWriter(
                 Path.of(path),
@@ -27,12 +26,9 @@ public class TrainingRepository {
             //ID、名前、点数、合否の順で書き込む
             bw.write(emp.getEmpId() + "," + emp.getEmpName() + "," + result.getScore() + "," + result.getJudge());
             bw.newLine();//改行用
-            save = true;
         } catch (Exception e) {
-            save = false;
-
+            throw new IllegalStateException("研修結果の保存に失敗しました。", e);
         }
-        return save;
     }
 
     public List<TrainingResult> findAll() {
@@ -49,7 +45,10 @@ public class TrainingRepository {
                 StandardCharsets.UTF_8)) {
             //中身がなくなったら終了できるように判別するString
             String txt;
+            //ｎ行目がおかしかった時エラー表示するためのカウンター
+            int lineNumber = 0;
             while ((txt = br.readLine()) != null) {
+                lineNumber++;//インクリメント
                 //空白を削除して空行なら処理をスキップ
                 if (txt.trim().isEmpty()) {
                     continue;
@@ -60,7 +59,7 @@ public class TrainingRepository {
 
                 //要素数が4でない場合はスキップ
                 if(value.length != 4){
-                    continue;
+                    throw new IllegalStateException(lineNumber + "行目の保存データの形が不正です。" + txt);
                 }
                 //リストに格納
                 //employeeをインスタンス化してIDと名前を渡す
@@ -73,8 +72,7 @@ public class TrainingRepository {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-
+            throw new IllegalStateException("研修結果の読み込みに失敗しました", e);
         }
         //リストを返す	
         return resultList;
