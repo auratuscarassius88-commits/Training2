@@ -140,14 +140,10 @@ public class Main {
 
         TrainingResult result = service.registerTrainingResult(emp, score);
 
-        boolean save = repository.save(result);
+        repository.save(result);
 
-        if (save) {
-            printResult(result);
-        } else {
-            System.out.println("書き込みに失敗しました。");
-        }
-
+        printResult(result);
+        
     }
 
     private static void printResultList(TrainingService service){
