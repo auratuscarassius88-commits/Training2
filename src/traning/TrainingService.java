@@ -6,30 +6,12 @@ public class TrainingService {
 
     public TrainingResult registerTrainingResult(Employee employee, int score) {
         //研修結果を登録する。
-
-        //例外処理
-        if (employee == null) {
-            throw new IllegalArgumentException("社員情報が入力されていません");
-        }
-
-        if (employee.getEmpId() == null || employee.getEmpId().isEmpty()) {
-            throw new IllegalArgumentException("社員IDが入力されていません");
-        }
-
-        if (employee.getEmpName() == null || employee.getEmpName().isEmpty()) {
-            throw new IllegalArgumentException("社員名が入力されていません");
-        }
-
-        if (score < 0 || score > 100) {
-            throw new IllegalArgumentException("点数は0点以上100点以下で入力してください");
-        }
         TrainingValidator validator = new TrainingValidator();
 
-        if (!validator.validate(employee, score)) {
-            throw new IllegalArgumentException("入力内容が正しくありません");
-        }
-
+        validator.validate(employee, score);//ここでエラーが出たらthrowされてmainでキャッチ
+        
         String judge = judgeResult(score);
+        
         return new TrainingResult(employee, score, judge);
     }
 
