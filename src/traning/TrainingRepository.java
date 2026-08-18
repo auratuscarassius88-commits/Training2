@@ -54,20 +54,20 @@ public class TrainingRepository {
                 if (txt.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 //カンマで分割して配列に格納
                 String[] value = txt.split(",");
 
                 //要素数が4でない場合はエラー処理としてストップ
-                if(value.length != 4){
+                if (value.length != 4) {
                     throw new IllegalStateException(lineNumber + "行目の保存データの形が不正です。" + txt);
                 }
-                
+
                 //scoreをintに変換するとき数字以外のものが入っていた場合エラーをキャッチする
                 int score = 0;
                 try {
                     score = Integer.parseInt(value[2].trim());
-                    
+
                 } catch (NumberFormatException e) {
                     throw new IllegalStateException(lineNumber + "行目のデータが数字ではありません。" + txt, e);
                 }
@@ -80,10 +80,9 @@ public class TrainingRepository {
                 //インスタンスをリストに追加
                 resultList.add(result);
 
-                 
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IllegalStateException("研修結果の読み込みに失敗しました", e);
         }
         //リストを返す	

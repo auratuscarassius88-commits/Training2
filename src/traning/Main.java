@@ -12,51 +12,54 @@ public class Main {
 
     public static void main(String[] args) {
         boolean ran = true;
-        
+
         //入力用のスキャナーをインスタンス化
         Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);//文字化け対策
         TrainingService service = new TrainingService();
         TrainingRepository repository = new TrainingRepository();
         //終了を選択しない限りループする仕様にする
-        while(ran){
-             try {
-
-            
-            
+        while (ran) {
+            try {
 
                 System.out.println("入力方法を選択してください");
                 System.out.println("1: 手入力");
                 System.out.println("2: ファイル読み込み");
                 System.out.println("3: 登録されている結果の表示");
-                System.out.println("6: 終了");
+                System.out.println("4: 終了");
 
                 //分岐用の変数
                 String mode = sc.nextLine();
 
-                switch(mode){
-                    case "1": inputOne(sc, service, repository);
-                         break;
-                    case "2": inputFile(sc, service, repository);
-                         break;
-                    case "3":printResultList(service);   
+                switch (mode) {
+                    case "1":
+                        inputOne(sc, service, repository);//手入力
                         break;
-                    case "6":ran = false;
+                    case "2":
+                        inputFile(sc, service, repository);//ファイル読み込み
                         break;
-                    default:System.out.println("正しい番号を入力してください");
+                    case "3":
+                        printResultList(service);//全件表示
+                        break;
+                    case "4":
+                        ran = false;//終了
+                        break;
+                    default:
+                        System.out.println("正しい番号を入力してください");
                         break;
                 }
-            
-            
+
             } catch (NumberFormatException e) {
                 System.out.println("点数には数値を入力してください");
 
             } catch (IllegalArgumentException e) {
                 System.out.println("入力エラー: " + e.getMessage());
-            //ファイルの読み込み失敗時エラーをキャッチできるようにする
+                //ファイルの読み込み失敗時エラーをキャッチできるようにする
             } catch (IOException e) {
                 System.out.println("ファイルの読み込みに失敗しました。");
                 System.out.println("ファイル名または配置場所を確認してください。");
-            
+            } catch (IllegalStateException e) {
+                System.out.println("データ処理エラー: " + e.getMessage());
+                ran = false;
             } catch (Exception e) {
                 System.out.println("予期しないエラーが発生しました");
                 //修復不可能なエラーなのでranを終了
@@ -64,11 +67,10 @@ public class Main {
             }
         }
         System.out.println("プログラムを終了します。");
-        
+
     }
 
     //単体読み込み用のメソッド ほかで使わないためprivateに
-
     private static void inputOne(Scanner sc, TrainingService service, TrainingRepository repository) {
 
         System.out.println("社員ID、名前、点数の順に入力してください");
@@ -138,21 +140,22 @@ public class Main {
         repository.save(result);
 
         printResult(result);
-        
+
     }
 
-    private static void printResultList(TrainingService service){
+    private static void printResultList(TrainingService service) {
         List<TrainingResult> resultList = service.getResultList();
         System.out.println("登録されてる結果を表示します。");
-        if(resultList.isEmpty()){
+        if (resultList.isEmpty()) {
             System.out.println("登録されている結果がありません");
-        }else{
+        } else {
             for (TrainingResult result : resultList) {
                 printResult(result);
             }
         }
-            
+
     }
+
     private static void printResult(TrainingResult result) {
         System.out.println("社員ID:" + result.getEmp().getEmpId());
         System.out.println("社員名:" + result.getEmp().getEmpName());
@@ -161,6 +164,4 @@ public class Main {
         System.out.println("--------------------");
     }
 
-    
-    
 }
