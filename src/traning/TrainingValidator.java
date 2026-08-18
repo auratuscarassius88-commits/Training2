@@ -11,12 +11,12 @@ public class TrainingValidator {
         if (employee == null) {
             throw new IllegalArgumentException("社員情報が入力されていません");
         }
-        //IDはちゃんと入力されているか判別
-        if (employee.getEmpId() == null || employee.getEmpId().isEmpty()) {
+        //IDはちゃんと入力されているか判別isEmpty()だともともと空か？しか対応していないみたいなのでisBlankを採用してスペースや空文字の場合でもはじけるようにした
+        if (employee.getEmpId() == null || employee.getEmpId().isBlank()) {
             throw new IllegalArgumentException("社員IDが入力されていません");
         }
         //名前がちゃんと入力されているか判定
-        if (employee.getEmpName() == null || employee.getEmpName().isEmpty()) {
+        if (employee.getEmpName() == null || employee.getEmpName().isBlank()) {
             throw new IllegalArgumentException("社員名が入力されていません");
         }
 
