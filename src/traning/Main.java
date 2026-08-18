@@ -16,7 +16,7 @@ public class Main {
         //入力用のスキャナーをインスタンス化
         Scanner sc = new Scanner(System.in, StandardCharsets.UTF_8);//文字化け対策
         TrainingService service = new TrainingService();
-        TrainingRepository repository = new TrainingRepository();
+        
         //終了を選択しない限りループする仕様にする
         while(ran){
              try {
@@ -34,9 +34,9 @@ public class Main {
                 String mode = sc.nextLine();
 
                 switch(mode){
-                    case "1": inputOne(sc, service, repository);
+                    case "1": inputOne(sc, service);
                          break;
-                    case "2": inputFile(sc, service, repository);
+                    case "2": inputFile(sc, service);
                          break;
                     case "3":printResultList(service);   
                         break;
@@ -69,7 +69,7 @@ public class Main {
 
     //単体読み込み用のメソッド ほかで使わないためprivateに
 
-    private static void inputOne(Scanner sc, TrainingService service, TrainingRepository repository) {
+    private static void inputOne(Scanner sc, TrainingService service) {
 
         System.out.println("社員ID、名前、点数の順に入力してください");
         System.out.println("社員ID");
@@ -82,12 +82,14 @@ public class Main {
 
         //empをインスタンス化
         Employee emp = new Employee(empId, empName);
-        //保存処理に移行
-        saveandprint(emp, score, service, repository);
+        //Serviceに妥当性確認、合否判定、保存処理をしてもらう
+        TrainingResult result = service.registerTrainingResult(emp, score);
+        //結果の表示
+        printResult(result);
     }
 
     //ファイル読み込み用
-    private static void inputFile(Scanner sc, TrainingService service, TrainingRepository repository) throws IOException {
+    private static void inputFile(Scanner sc, TrainingService service) throws IOException {
 
         System.out.println("読み込むファイル名を入力してください");
         //同じ階層にあることが前提？
@@ -98,7 +100,7 @@ public class Main {
             String line;
             //nullになるまで繰り返す
             while ((line = br.readLine()) != null) {
-                //trimで空白を無くし空行であればスキップ
+                //前後の空白を除いた結果が空なら、その行をスキップ
                 if (line.trim().isEmpty()) {
                     continue;
                 }
@@ -114,10 +116,11 @@ public class Main {
                     String empName = data[1].trim();
                     int score = Integer.parseInt(data[2].trim());
                     Employee emp = new Employee(empId, empName);
-
-                    //All or Nothingにしたかったが、工数がかかるのでで1行づつ保存、結果表示
-                    saveandprint(emp, score, service, repository);
-
+                    //Serviceに妥当性確認、合否判定、保存処理をしてもらう
+                    TrainingResult result = service.registerTrainingResult(emp, score);
+                    //結果の表示
+                    printResult(result);
+                    
                 } catch (NumberFormatException e) {
                     System.out.println("この行は登録できませんでした: " + line);
                     System.out.println("理由: 点数には数値を入力してください");
@@ -129,16 +132,6 @@ public class Main {
             }
         }
 
-    }
-
-    private static void saveandprint(Employee emp, int score, TrainingService service, TrainingRepository repository) {
-
-        TrainingResult result = service.registerTrainingResult(emp, score);
-
-        repository.save(result);
-
-        printResult(result);
-        
     }
 
     private static void printResultList(TrainingService service){
