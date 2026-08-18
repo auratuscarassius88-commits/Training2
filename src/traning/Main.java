@@ -28,7 +28,7 @@ public class Main {
                 System.out.println("1: 手入力");
                 System.out.println("2: ファイル読み込み");
                 System.out.println("3: 登録されている結果の表示");
-                System.out.println("6: 終了");
+                System.out.println("4: 終了");
 
                 //分岐用の変数
                 String mode = sc.nextLine();
@@ -40,7 +40,7 @@ public class Main {
                          break;
                     case "3":printResultList(service);   
                         break;
-                    case "6":ran = false;
+                    case "4":ran = false;
                         break;
                     default:System.out.println("正しい番号を入力してください");
                         break;
