@@ -30,24 +30,12 @@ public class Main {
                 //分岐用の変数
                 String mode = sc.nextLine();
 
-<<<<<<< HEAD
-                switch (mode) {
-                    case "1":
-                        inputOne(sc, service, repository);//手入力
-=======
                 switch(mode){
                     case "1": inputOne(sc, service);
                          break;
                     case "2": inputFile(sc, service);
                          break;
                     case "3":printResultList(service);   
->>>>>>> origin/service/main-methd
-                        break;
-                    case "2":
-                        inputFile(sc, service, repository);//ファイル読み込み
-                        break;
-                    case "3":
-                        printResultList(service);//全件表示
                         break;
                     case "4":
                         ran = false;//終了
@@ -80,12 +68,8 @@ public class Main {
     }
 
     //単体読み込み用のメソッド ほかで使わないためprivateに
-<<<<<<< HEAD
-    private static void inputOne(Scanner sc, TrainingService service, TrainingRepository repository) {
-=======
 
     private static void inputOne(Scanner sc, TrainingService service) {
->>>>>>> origin/service/main-methd
 
         System.out.println("社員ID、名前、点数の順に入力してください");
         System.out.println("社員ID");
@@ -150,21 +134,7 @@ public class Main {
 
     }
 
-<<<<<<< HEAD
-    private static void saveandprint(Employee emp, int score, TrainingService service, TrainingRepository repository) {
-
-        TrainingResult result = service.registerTrainingResult(emp, score);
-
-        repository.save(result);
-
-        printResult(result);
-
-    }
-
-    private static void printResultList(TrainingService service) {
-=======
     private static void printResultList(TrainingService service){
->>>>>>> origin/service/main-methd
         List<TrainingResult> resultList = service.getResultList();
         System.out.println("登録されてる結果を表示します。");
         if (resultList.isEmpty()) {
