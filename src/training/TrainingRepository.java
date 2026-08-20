@@ -56,7 +56,7 @@ public class TrainingRepository {
                 }
 
                 //カンマで分割して配列に格納
-                String[] value = txt.split(",");
+                String[] value = txt.split(",", -1);
 
                 //要素数が4でない場合はエラー処理としてストップ
                 if (value.length != 4) {

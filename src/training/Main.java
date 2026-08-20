@@ -107,7 +107,7 @@ public class Main {
 
                 try {
                     //カンマ区切りで配列に
-                    String[] data = line.split(",");
+                    String[] data = line.split(",", -1);
                     //配列が3つ以外ならエラー処理する
                     if (data.length != 3) {
                         throw new IllegalArgumentException("ファイル形式に問題があります:" + line);
