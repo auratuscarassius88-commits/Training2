@@ -24,6 +24,14 @@ public class TrainingValidator {
         if (score < 0 || score > 100) {
             throw new IllegalArgumentException("点数は0点以上100点以下で入力してください");
         }
+        //カンマの使用を制限するためのエラー
+        
+        if(employee.getEmpId().contains(",")){
+            throw new IllegalArgumentException("社員IDにカンマは使えません");
+        }
+        if(employee.getEmpName().contains(",")){
+            throw new IllegalArgumentException("社員名にカンマは使えません");
+        }
 
         //受講者情報のIDが重複していないことを確認
         TrainingRepository repository = new TrainingRepository();
