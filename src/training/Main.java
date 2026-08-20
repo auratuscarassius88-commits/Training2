@@ -101,7 +101,7 @@ public class Main {
             //nullになるまで繰り返す
             while ((line = br.readLine()) != null) {
                 //前後の空白を除いた結果が空なら、その行をスキップ
-                if (line.trim().isEmpty()) {
+                if (line.isBlank()) {
                     continue;
                 }
 
@@ -112,9 +112,9 @@ public class Main {
                     if (data.length != 3) {
                         throw new IllegalArgumentException("ファイル形式に問題があります:" + line);
                     }
-                    String empId = data[0].trim();
-                    String empName = data[1].trim();
-                    int score = Integer.parseInt(data[2].trim());
+                    String empId = data[0].strip();
+                    String empName = data[1].strip();
+                    int score = Integer.parseInt(data[2].strip());
                     Employee emp = new Employee(empId, empName);
                     //Serviceに妥当性確認、合否判定、保存処理をしてもらう
                     TrainingResult result = service.registerTrainingResult(emp, score);

@@ -51,7 +51,7 @@ public class TrainingRepository {
             while ((txt = br.readLine()) != null) {
                 lineNumber++;//インクリメント
                 //空白を削除して空行なら処理をスキップ
-                if (txt.trim().isEmpty()) {
+                if (txt.isBlank()) {
                     continue;
                 }
 
@@ -66,16 +66,16 @@ public class TrainingRepository {
                 //scoreをintに変換するとき数字以外のものが入っていた場合エラーをキャッチする
                 int score = 0;
                 try {
-                    score = Integer.parseInt(value[2].trim());
+                    score = Integer.parseInt(value[2].strip());
 
                 } catch (NumberFormatException e) {
                     throw new IllegalStateException(lineNumber + "行目のデータが数字ではありません。" + txt, e);
                 }
                 //リストに格納
                 //employeeをインスタンス化してIDと名前を渡す
-                Employee emp = new Employee(value[0].trim(), value[1].trim());
+                Employee emp = new Employee(value[0].strip(), value[1].strip());
                 //empとスコアと合否をコンストラクタに渡してTrainingResluをインスタンス化
-                TrainingResult result = new TrainingResult(emp, score, value[3].trim());//空白を消す意味はあるのだろうか？
+                TrainingResult result = new TrainingResult(emp, score, value[3].strip());//空白を消す意味はあるのだろうか？
 
                 //インスタンスをリストに追加
                 resultList.add(result);

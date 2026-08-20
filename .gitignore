@@ -1,0 +1,7 @@
+# Java build output
+bin/
+*.class
+
+# Local JDK installations must not be committed.
+**/oracleJdk-*/
+**/jdk-*/

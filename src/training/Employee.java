@@ -7,8 +7,9 @@ public class Employee {
 
     public Employee(String empId, String empName) {
         super();
-        this.empId = empId;
-        this.empName = empName;
+        //三項演算子でnullかを判定してそうでない場合空白を削除
+        this.empId = empId == null ? null : empId.strip();
+        this.empName = empName == null ? null : empName.strip();
     }
 
     public String getEmpId() {
