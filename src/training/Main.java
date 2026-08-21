@@ -126,11 +126,11 @@ public class Main {
                     System.out.println("登録完了しました。");
                     
                 } catch (NumberFormatException e) {
-                    System.out.println("この行は登録できませんでした: " + line);
+                    System.out.println(linenumber + "行は登録できませんでした: " + line);
                     System.out.println("理由: 点数には数値を入力してください");
 
                 } catch (IllegalArgumentException e) {
-                    System.out.println(number + "行は登録できませんでした: " + line);
+                    System.out.println(linenumber + "行は登録できませんでした: " + line);
                     System.out.println("理由: " + e.getMessage());
                 }
             }
