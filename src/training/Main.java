@@ -99,10 +99,10 @@ public class Main {
         try (BufferedReader br = Files.newBufferedReader(Path.of(fileName), StandardCharsets.UTF_8)) {
             //中身を入れる変数
             String line;
-            int number = 0;
+            int linenumber = 0;
             //nullになるまで繰り返す
             while ((line = br.readLine()) != null) {
-                number++;
+                linenumber++;
                 //前後の空白を除いた結果が空なら、その行をスキップ
                 if (line.isBlank()) {
                     continue;
