@@ -99,10 +99,10 @@ public class Main {
         try (BufferedReader br = Files.newBufferedReader(Path.of(fileName), StandardCharsets.UTF_8)) {
             //中身を入れる変数
             String line;
-            int linenumber = 0;
+            int lineNumber = 0;
             //nullになるまで繰り返す
             while ((line = br.readLine()) != null) {
-                linenumber++;
+                lineNumber++;
                 //前後の空白を除いた結果が空なら、その行をスキップ
                 if (line.isBlank()) {
                     continue;
@@ -126,11 +126,11 @@ public class Main {
                     System.out.println("登録完了しました。");
                     
                 } catch (NumberFormatException e) {
-                    System.out.println(linenumber + "行目は登録できませんでした: " + line);
+                    System.out.println(lineNumber + "行目は登録できませんでした: " + line);
                     System.out.println("理由: 点数には数値を入力してください");
 
                 } catch (IllegalArgumentException e) {
-                    System.out.println(linenumber + "行目は登録できませんでした: " + line);
+                    System.out.println(lineNumber + "行目は登録できませんでした: " + line);
                     System.out.println("理由: " + e.getMessage());
                 }
             }
