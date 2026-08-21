@@ -86,6 +86,7 @@ public class Main {
         TrainingResult result = service.registerTrainingResult(emp, score);
         //結果の表示
         printResult(result);
+        System.out.println("登録完了しました。");
     }
 
     //ファイル読み込み用
@@ -120,6 +121,7 @@ public class Main {
                     TrainingResult result = service.registerTrainingResult(emp, score);
                     //結果の表示
                     printResult(result);
+                    System.out.println("登録完了しました。");
                     
                 } catch (NumberFormatException e) {
                     System.out.println("この行は登録できませんでした: " + line);
